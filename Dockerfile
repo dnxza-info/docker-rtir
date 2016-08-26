@@ -12,6 +12,7 @@ RUN cd /usr/local/src \
   && rm RT-IR.tar.gz \
   && cd "RT-IR-${RTIR_VERSION}" \
   && perl Makefile.PL \
-  && make install
+  && make install \
+  && make initdb
 
 CMD [ "/bin/bash", "/start.sh", "start" ]
