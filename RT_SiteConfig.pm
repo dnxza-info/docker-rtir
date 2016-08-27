@@ -1,8 +1,6 @@
 use utf8;
 
-Set($WebPort, 8080);
-Set($MailCommand, "testfile");
+Set($WebPort, 80);
 
-Plugin('RT::IR');
-
+    Plugin('RT::IR');
 1;
