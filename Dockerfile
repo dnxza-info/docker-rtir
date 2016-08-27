@@ -9,6 +9,7 @@ RUN rm /opt/rt4/etc/RT_SiteConfig.pm
 COPY RT_SiteConfig.pm /opt/rt4/etc/RT_SiteConfig.pm
 
 RUN cd /usr/local/src \
+  && /usr/bin/mysqld_safe & sleep 10s \
   && curl -sSL "https://download.bestpractical.com/pub/rt/release/RT-IR-${RTIR_VERSION}.tar.gz" -o RT-IR.tar.gz \
   && echo "${RTIR_SHA1}  RT-IR.tar.gz" | shasum -c \
   && tar -xvzf RT-IR.tar.gz \
@@ -16,6 +17,6 @@ RUN cd /usr/local/src \
   && cd "RT-IR-${RTIR_VERSION}" \
   && perl Makefile.PL \
   && make install \
-  && make initdb
+  && /usr/bin/perl -Ilib -I/opt/rt4/local/lib -I/opt/rt4/lib /opt/rt4/sbin/rt-setup-database --action insert --datadir etc --datafile etc/initialdata --dba root --dba-password=$MYSQLPASS --package RT::IR --ext-version ${RTIR_VERSION}
 
 CMD [ "/bin/bash", "/start.sh", "start" ]
