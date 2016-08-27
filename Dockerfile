@@ -18,9 +18,10 @@ RUN cd /usr/local/src \
   
 WORKDIR /usr/local/src/RT-IR-${RTIR_VERSION}
 
-RUN perl Makefile.PL \
-  && /usr/bin/mysqld_safe & sleep 10s \
+RUN export PERL_MM_USE_DEFAULT=1 \
+  && perl Makefile.PL \
   && make install \
+  && /usr/bin/mysqld_safe & sleep 10s \
   && /usr/bin/perl -Ilib -I/opt/rt4/local/lib -I/opt/rt4/lib /opt/rt4/sbin/rt-setup-database --action insert --datadir etc --datafile etc/initialdata --dba root --dba-password=$MYSQLPASS --package RT::IR --ext-version ${RTIR_VERSION}
 
 WORKDIR /opt/rt4
