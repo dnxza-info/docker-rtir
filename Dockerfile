@@ -18,10 +18,11 @@ RUN cd /usr/local/src \
   && tar -xvzf RT-IR.tar.gz \
   && rm RT-IR.tar.gz 
   
-WORKDIR /usr/local/src/rt-${RT_VERSION}  
+WORKDIR /usr/local/src/rt-${RT_VERSION}
+
+RUN PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Parse::BooleanLogic'  
 
 RUN cd /usr/local/src/RT-IR-${RTIR_VERSION} \
-  && export PERL_MM_USE_DEFAULT=1 \
   && /usr/bin/mysqld_safe & sleep 10s \
   && perl Makefile.PL \
   && make install \
