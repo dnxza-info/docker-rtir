@@ -22,13 +22,10 @@ RUN PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install Parse::BooleanLogic'
 
 WORKDIR /usr/local/src/RT-IR-${RTIR_VERSION}
 
+RUN perl Makefile.PL \
+  && make install
+
 RUN /usr/bin/mysqld_safe & sleep 10s \
-  && perl Makefile.PL \
-  && make install \
-  && /usr/bin/perl -Ilib -I/opt/rt4/local/lib -I/opt/rt4/lib /opt/rt4/sbin/rt-setup-database --action insert --datadir etc --datafile etc/initialdata --dba root --dba-password=$MYSQLPASS --package RT::IR --ext-version ${RTIR_VERSION}
+  && echo $MYSQLPASS | make initdb
 
 RUN chown -R www-data:www-data /opt/rt4/var/
-
-WORKDIR /opt/rt4
-
-CMD [ "/bin/bash", "/start.sh", "start" ]
