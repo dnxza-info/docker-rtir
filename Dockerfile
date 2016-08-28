@@ -18,16 +18,15 @@ RUN cd /usr/local/src \
   && tar -xvzf RT-IR.tar.gz \
   && rm RT-IR.tar.gz 
   
-WORKDIR /usr/local/src/RT-IR-${RTIR_VERSION}
+WORKDIR /usr/local/src/rt-${RT_VERSION}  
 
-RUN export PERL_MM_USE_DEFAULT=1 \
+RUN cd /usr/local/src/RT-IR-${RTIR_VERSION}
+  && export PERL_MM_USE_DEFAULT=1 \
   && /usr/bin/mysqld_safe & sleep 10s \
   && perl Makefile.PL \
   && make install \
   && /usr/bin/perl -Ilib -I/opt/rt4/local/lib -I/opt/rt4/lib /opt/rt4/sbin/rt-setup-database --action insert --datadir etc --datafile etc/initialdata --dba root --dba-password=$MYSQLPASS --package RT::IR --ext-version ${RTIR_VERSION}
 
 RUN chown -R www-data:www-data /opt/rt4/var/
-  
-WORKDIR /usr/local/src/rt-${RT_VERSION}
-  
+
 CMD [ "/bin/bash", "/start.sh", "start" ]
