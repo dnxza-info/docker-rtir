@@ -20,7 +20,7 @@ RUN cd /usr/local/src \
   
 WORKDIR /usr/local/src/rt-${RT_VERSION}  
 
-RUN cd /usr/local/src/RT-IR-${RTIR_VERSION}
+RUN cd /usr/local/src/RT-IR-${RTIR_VERSION} \
   && export PERL_MM_USE_DEFAULT=1 \
   && /usr/bin/mysqld_safe & sleep 10s \
   && perl Makefile.PL \
